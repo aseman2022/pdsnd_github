@@ -46,19 +46,19 @@ def get_filters():
 
 
 
-    # TO DO: get user input for day of week (all, monday, tuesday, ... sunday)
+    # TO DO: get user input for day of week (all, monday, tuesday,wednesday, thursday, friday, saturday, sunday)
 
-  day = ' '
+    day = ' '
+	
     while(day.lower() not in days):
-        day = input('\n Enter the day of week (monday, tuesday, so on....) to see the data: ')
+        day = input('\n Enter the day of week (monday, tuesday, wednesday, thursday, friday, saturday, sunday: ')
         day = day.lower()
         if day not in days:
             print('\n Input is invalid and type a correct day of the week')
         else: 
             break
 
-            
-            
+	
     print('-'*40)
     return city, month, day
 
@@ -75,7 +75,33 @@ def load_data(city, month, day):
         df - Pandas DataFrame containing city data filtered by month and day
     """
 
+ # load data file into a dataframe
+    
+    df = pd.read_csv(CITY_DATA[city])
+    
+    # convert the Start Time column to datetime (practice problems)
+    df['Start Time'] = pd.to_datetime(df['Start Time'])
 
+    # extract month and day and hour from Start Time to create new columns (practice problems)
+    df['month'] = df['Start Time'].dt.month
+    df['day_of_week'] = df['Start Time'].dt.weekday_name
+    df['hour'] = df['Start Time'].dt.hour
+
+    # filter by month if applicable
+    #if month != 'all':
+
+    # use the index of the months list to get the corresponding int (practice problems)
+    #months = ['january', 'february', 'march', 'april', 'may', 'june']
+    month = months.index(month) + 1
+
+    # filter by month to create new dataframe
+    df = df[df['month'] == month]
+
+    # filter by day of week if applicable
+    #if day != 'all':
+
+    # filter by day of week to create the new dataframe (practice problems)
+    df = df[df['day_of_week'] == day.title()]
     return df
 
 
@@ -87,8 +113,7 @@ def time_stats(df):
 
     # TO DO: display the most common month
     
-     print('The most common month:', months[df['month'].mode()[0] - 1].title())
-
+    print('The most common month:', months[df['month'].mode()[0] - 1].title())
 
     # TO DO: display the most common day of week
 
@@ -98,7 +123,6 @@ def time_stats(df):
 
     print('The most common start hour:', df['hour'].mode()[0])
 
-    
     print("\nThis took %s seconds." % (time.time() - start_time))
     print('-'*40)
 
