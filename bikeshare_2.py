@@ -14,7 +14,6 @@ days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sun
 def get_filters():
     """
     Asks user to specify a city, month, and day to analyze.
-
     Returns:
         (str) city - name of the city to analyze
         (str) month - name of the month to filter by, or "all" to apply no month filter
@@ -67,7 +66,6 @@ def get_filters():
 def load_data(city, month, day):
     """
     Loads data for the specified city and filters by month and day if applicable.
-
     Args:
         (str) city - name of the city to analyze
         (str) month - name of the month to filter by, or "all" to apply no month filter
@@ -179,6 +177,12 @@ def user_stats(df):
     # TO DO: Display counts of user types
 
     print('Counts of user types:\n', df['User Type'].value_counts())
+
+    #except Washington
+    if city == 'washington':
+        print('\n The Gender and Birth Year information is not available for Washington.')
+    else:
+    
     
     # TO DO: Display counts of gender
 
@@ -207,6 +211,28 @@ def main():
         if restart.lower() != 'yes':
             break
 
+ else:
+                print('\nAfter applying filters, the dataset for {} contains {} rows.'.format(city,df.shape[0]))
+                print('The raw data is displayed below as requested.\n', df.head(5))
+                head = 0
+                tail = 5
+                while True:
+                    display_more = (input('\n Do u want to display more data.? Enter yes or no.: \n '))
+                    if display_more.lower() == 'yes':
+                        head += 5
+                        tail += 5
+                        print(df[df.columns[0:-1]].iloc[head:tail])
+                    elif display_more.lower() == 'no':
+                        break
+                break
+                        
+        
+
+        restart = input('\nWould you like to restart? Enter yes or no.\n')
+        if restart.lower() != 'yes':
+            break
+
 
 if __name__ == "__main__":
 	main()
+
